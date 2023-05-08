@@ -29,6 +29,7 @@ pipeline{
 		}
 		stage('Push Docker Image') {
 			steps {
+				sh "gcloud auth configure-docker"
 				sh "docker push ${imageTag}"
 			}
 			when { branch 'main' }
