@@ -53,5 +53,13 @@ pipeline{
 			}
 			when { branch 'main' }
 		}
+		stage('Validate Kubernetes Manifests') {
+			steps {
+				sh "helm template maintanence ./chart" + 
+					" --set image.tag=${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+					" | kubectl create --validate=true --dry-run=client -f -"
+			}
+			when { not { branch 'main'} }
+		}
 	}
 }
