@@ -17,11 +17,18 @@ pipeline{
 	environment {
 		productName = 'maintanence'
 		imageTag = "${docker_repo}/${productName}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+		PATH = "${tool 'helm'}:${PATH}"
 	}
 
 	agent any
 
 	stages {
+		stage('Setup GCP Environment') {
+			steps {
+				sh "gcloud config set project ${GCP_PROJECT}"
+				sh "gcloud container clusters get-credentials management-cluster --zone=${zone}"
+			}
+		}
 		stage('Build Docker Container') {
 			steps {
 				sh "docker build -t ${imageTag} ."
@@ -33,6 +40,12 @@ pipeline{
 				sh "docker push ${imageTag}"
 			}
 			when { branch 'main' }
+		}
+		stage('Deploy Maintanence Notice') {
+			steps {
+				sh "helm upgrade maintanence ./chart --namespace cessda-mgmt --install" + 
+					" --set image.tag=${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+			}
 		}
 	}
 }
