@@ -14,6 +14,10 @@
 */
 pipeline{
 
+	options {
+		disableConcurrentBuilds()
+	}
+
 	environment {
 		productName = 'maintanence'
 		imageTag = "${docker_repo}/${productName}:${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
