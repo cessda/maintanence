@@ -32,6 +32,7 @@ pipeline{
 				sh "gcloud config set project ${GCP_PROJECT}"
 				sh "gcloud container clusters get-credentials management-cluster --zone=${zone}"
 			}
+			when { branch 'main' }
 		}
 		stage('Build Docker Container') {
 			steps {
@@ -50,6 +51,7 @@ pipeline{
 				sh "helm upgrade maintanence ./chart --namespace cessda-mgmt --install" + 
 					" --set image.tag=${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 			}
+			when { branch 'main' }
 		}
 	}
 }
