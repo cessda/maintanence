@@ -36,7 +36,9 @@ pipeline{
 		}
 		stage('Build Docker Container') {
 			steps {
-				sh "docker build -t ${imageTag} ."
+				dir('container') {
+					sh "docker build -t ${imageTag} ."
+				}
 			}
 		}
 		stage('Push Docker Image') {
