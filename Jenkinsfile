@@ -30,7 +30,7 @@ pipeline{
 		stage('Setup GCP Environment') {
 			steps {
 				sh "gcloud config set project ${GCP_PROJECT}"
-				sh "gcloud container clusters get-credentials management-cluster --zone=${zone}"
+				sh "gcloud container clusters get-credentials production-cluster --zone=${zone}"
 			}
 			when { branch 'main' }
 		}
