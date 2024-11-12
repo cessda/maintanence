@@ -50,7 +50,7 @@ pipeline{
 		}
 		stage('Deploy Maintanence Notice') {
 			steps {
-				sh "helm upgrade maintanence ./chart --namespace cessda-mgmt --install" + 
+				sh "helm upgrade maintanence ./chart --namespace cessda-mgmt --create-namespace --install" + 
 					" --set image.tag=${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 			}
 			when { branch 'main' }
